@@ -8,7 +8,8 @@ def get_trees(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_users_trees(db: Session, owner_id: int):
-    return not db.query(models.TreeModel).filter(models.TreeModel.owner_id == owner_id).all
+    users_trees = db.query(models.TreeModel).filter(models.TreeModel.owner_id == owner_id).all()
+    return users_trees
 
 
 def create_user_tree(db: Session, tree: TreeCreate, user_id: int):
