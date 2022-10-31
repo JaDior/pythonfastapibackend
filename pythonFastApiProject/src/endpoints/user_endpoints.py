@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 import src.models
 import src.crud.user_crud
-from src.schemas.user_schema import User, UserInDB
+from src.schemas.user_schema import User, UserInDB, UserBase
 from src.database import SessionLocal, engine
 from src.auth.auth import authenticate_user, create_access_token, get_current_active_user
 
@@ -36,9 +36,6 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return users
 
 
-@user_router.get("/users/{user_id}", response_model=User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
-    db_user = src.crud.user_crud.get_user(db, user_id=user_id)
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return db_user
+@user_router.get("/users/me/", response_model=UserBase)
+async def read_users_me(current_user: UserBase = Depends(get_current_active_user)):
+    return current_user

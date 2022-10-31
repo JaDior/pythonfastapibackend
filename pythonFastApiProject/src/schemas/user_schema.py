@@ -4,6 +4,7 @@ from src.schemas.tree_schema import *
 
 
 class UserBase(BaseModel):
+    id: int
     username: str
     email: str | None = None
     full_name: str | None = None

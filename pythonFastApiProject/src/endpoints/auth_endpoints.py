@@ -50,3 +50,4 @@ async def read_users_me(current_user: UserBase = Depends(get_current_active_user
 @auth_router.get("/users/me/trees/")
 async def read_own_trees(current_user: UserBase = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.username}]
+
