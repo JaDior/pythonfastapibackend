@@ -22,18 +22,12 @@ def get_db():
         db.close()
 
 
-@user_router.post("/users/", response_model=User)
+@user_router.post("/register/", response_model=User)
 def create_user(user: UserInDB, db: Session = Depends(get_db)):
     db_user = src.crud.user_crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     return src.crud.user_crud.create_user(db=db, user=user)
-
-
-@user_router.get("/users/", response_model=list[User])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    users = src.crud.user_crud.get_users(db, skip=skip, limit=limit)
-    return users
 
 
 @user_router.get("/users/me/", response_model=UserBase)
