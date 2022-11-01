@@ -22,6 +22,11 @@ def get_db():
         db.close()
 
 
+@user_router.get("/")
+async def root():
+    return{"message": "tree project hehe"}
+
+
 @user_router.post("/register/", response_model=User)
 def create_user(user: UserInDB, db: Session = Depends(get_db)):
     db_user = src.crud.user_crud.get_user_by_email(db, email=user.email)
