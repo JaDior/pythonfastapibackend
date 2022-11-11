@@ -19,7 +19,7 @@ def get_db():
         db.close()
 
 
-@tree_router.post("/users/trees/", response_model=Tree)
+@tree_router.post("/user/trees/", response_model=Tree)
 def create_tree_for_user(tree: TreeCreate, current_user: UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
     return src.crud.tree_crud.create_user_tree(db=db, tree=tree, user_id=current_user.id)
 

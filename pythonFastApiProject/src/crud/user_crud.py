@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from src.auth.auth import get_password_hash
@@ -24,3 +25,11 @@ def create_user(db: Session, user: UserInDB):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def check_if_username_taken(db: Session,  username: str):
+    user = db.query(models.UserModel).filter(models.UserModel.username == username).first()
+    if user:
+        raise HTTPException(status_code=204)
+    else:
+        return False
