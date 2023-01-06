@@ -20,7 +20,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 def create_user(db: Session, user: UserInDB):
     hashed_password = get_password_hash(user.hashed_password)
-    db_user = models.UserModel(username=user.username, email=user.email, hashed_password=hashed_password)
+    db_user = models.UserModel(username=user.username, full_name=user.full_name, email=user.email, hashed_password=hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -33,3 +33,10 @@ def check_if_username_taken(db: Session,  username: str):
         raise HTTPException(status_code=204)
     else:
         return False
+
+
+def update_user(db: Session, new_user: UserInDB):
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user

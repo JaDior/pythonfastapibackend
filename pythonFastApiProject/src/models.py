@@ -21,6 +21,7 @@ class TreeModel(Base):
     __tablename__ = "trees"
 
     id = Column(Integer, primary_key=True)
+    private = Column(Boolean, index=True, default=True)
     name = Column(String, index=True)
     species = Column(String, index=True)
     genus = Column(String, index=True)

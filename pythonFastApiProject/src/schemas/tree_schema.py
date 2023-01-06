@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class TreeBase(BaseModel):
+    private: bool
     name: str
     species: str
     genus: str

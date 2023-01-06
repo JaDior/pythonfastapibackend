@@ -4,7 +4,7 @@ import src.models
 import src.crud.user_crud
 from src.schemas.user_schema import User, UserInDB, UserBase
 from src.database import SessionLocal, engine
-from src.auth.auth import authenticate_user, create_access_token, get_current_active_user
+from src.auth.auth import authenticate_user, get_user_by_username, get_current_active_user
 
 
 src.models.Base.metadata.create_all(bind=engine)
@@ -38,6 +38,14 @@ def create_user(user: UserInDB, db: Session = Depends(get_db)):
 @user_router.get("/user/me/", response_model=UserBase)
 async def read_users_me(current_user: UserBase = Depends(get_current_active_user)):
     return current_user
+
+
+@user_router.patch("/user/update", response_model=UserBase)
+async def update_user_me(user: UserBase, current_user: UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    old_user = get_user_by_username(db=db, username=current_user.username)
+    for key, value in user:
+        setattr(old_user, key, value)
+    return src.crud.user_crud.update_user(db=db, new_user=old_user)
 
 
 @user_router.get("/user/username={username}")
