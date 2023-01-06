@@ -15,6 +15,7 @@ class TreeCreate(TreeBase):
 
 class Tree(TreeBase):
     id: int
+    deleted: bool
     owner_id: int
 
     class Config:

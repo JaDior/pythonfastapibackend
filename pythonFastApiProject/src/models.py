@@ -26,6 +26,7 @@ class TreeModel(Base):
     species = Column(String, index=True)
     genus = Column(String, index=True)
     img = Column(String, index=True)
+    deleted = Column(Boolean, index=True, default=False)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("UserModel", back_populates="trees")

@@ -6,17 +6,18 @@ import boto3
 BUCKET_NAME = "tree-project-bucket"
 
 
-def get_trees(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.TreeModel).offset(skip).limit(limit).all()
+def get_tree(db: Session, tree_id: int):
+    tree = db.query(models.TreeModel).filter(models.TreeModel.id == tree_id).first()
+    return tree
 
 
 def get_all_public_trees(db: Session):
-    trees = db.query(models.TreeModel).filter(models.TreeModel.private == 'false').all()
+    trees = db.query(models.TreeModel).filter(models.TreeModel.private == 'false', models.TreeModel.deleted == 'false').all()
     return trees
 
 
 def get_users_trees(db: Session, owner_id: int):
-    users_trees = db.query(models.TreeModel).filter(models.TreeModel.owner_id == owner_id).all()
+    users_trees = db.query(models.TreeModel).filter(models.TreeModel.owner_id == owner_id, models.TreeModel.deleted == 'false').all()
     return users_trees
 
 
@@ -31,3 +32,9 @@ def create_user_tree(file, db: Session, tree: TreeCreate):
     db.commit()
     db.refresh(tree)
     return tree
+
+
+def delete_user_tree(db: Session, tree: TreeBase):
+    db.add(tree)
+    db.commit()
+    db.refresh(tree)
